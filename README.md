@@ -1,191 +1,148 @@
-```
-PRIM-003
-ATTESTORIUM
-Deterministic witness
+# ATTESTORIUM
 
-STATUS: REGISTERED
-REGISTRY: https://speedkit.eu
-SNAPSHOT: https://speedkit.eu/REGISTRY_SNAPSHOT.json
-```
+Primitive ID: PRIM-006  
+Package: @verifrax/attestorium  
+Binary: attestorium
 
-Registered artifact. Identity governed by SPEEDKIT registry.
-
-STATUS: FINAL
+Verifrax primitive — attestation primitive for deterministic irreversible systems.
 
 ---
 
-ATTESTORIUM is a deterministic witness.
+## Status
 
-It does not decide.
-It does not execute.
-It does not intervene.
+Current release status: pre-stable primitive release line.
 
-It records **what exists**, exactly as it exists, at the moment it is observed.
+Canonical release target:
 
----
+package version: 0.1.0  
+tag: v0.1.0
 
-## Philosophy
-
-ATTESTORIUM exists to preserve truth under pressure.
-
-It is designed for moments where:
-
-* Output must be witnessed, not evaluated
-* State must be frozen without alteration
-* Accountability depends on *what was*, not *what was claimed*
-
-ATTESTORIUM does not improve reality.
-It prevents reality from being rewritten.
+ATTESTORIUM is part of the Verifrax primitive layer and follows the canonical primitive governance, naming, version, and packaging rules.
 
 ---
 
-## What It Is
+## Purpose
 
-ATTESTORIUM is an **attestation primitive**.
+ATTESTORIUM witnesses and attests to a verification result after origin, custody, time, boundary, and verification have already been fixed.
 
-It binds:
+Once an artifact has a stable origin, preserved custody, explicit time boundary, enforced operating boundary, and deterministic verification result, the system still needs a formal witnessing layer that can state that this result was observed and attested under defined conditions. ATTESTORIUM exists to produce that attestation layer.
 
-* Observed input (stdin)
-* Repository state
-* Time
-
-Into a single, immutable record.
-
-The result is evidence.
+It does not establish origin. It does not preserve custody. It does not fix temporal order. It does not enforce boundaries. It does not verify correctness by itself. It does not judge or terminate. Its role is narrower: witness and attest to an already-determined verification state.
 
 ---
 
-## What It Is Not
+## What This Primitive Does
 
-* Not a validator
-* Not a linter
-* Not a judge
-* Not a fixer
-* Not an executor
-
-Anything that changes state is out of scope.
+- attests to a deterministic verification outcome
+- creates a witness-bearing record suitable for downstream judgment
+- emits attestation output that preserves observed verification state
 
 ---
 
-## Behavior
+## What This Primitive Does Not Do
 
-* Consumes input **exclusively** via `stdin`
-* Refuses silent invocation
-* Captures repository metadata:
-
-  * HEAD commit
-  * tree hash
-  * dirty state
-* Generates a deterministic SHA-256 attestation
-* Emits a single, final attestation record
-
-No retries.
-No flags.
-No configuration.
+- does not establish first origin
+- does not preserve custody continuity
+- does not fix temporal ordering
+- does not enforce operational boundaries
+- does not perform primary verification itself
+- does not judge validity
+- does not terminate lifecycle
 
 ---
 
-## Output
+## Behavioral Contract
 
-ATTESTORIUM emits a structured attestation containing:
+Invocation model:
 
-* Timestamp (UTC)
-* Git commit hash (or `UNCOMMITTED`)
-* Tree hash
-* Working tree state (`CLEAN` / `DIRTY`)
-* Input hash
-* Attestation hash
+executable: attestorium  
+package: @verifrax/attestorium  
+runtime: CLI-first
 
-This output is the artifact.
+The primitive operates on an artifact whose origin, custody, time, boundary, and verification surfaces are already fixed.
+
+If no stable verification result exists, ATTESTORIUM must not fabricate an attestation.
+
+Exit codes:
+
+0 — attestation completed successfully  
+non-zero — invocation failed or contract violated
 
 ---
 
 ## Usage
 
-ATTESTORIUM is never run alone.
-It must witness output.
+Install:
 
-```sh
-<command-producing-output> | ./attestorium.sh
-```
+npm install -g @verifrax/attestorium
 
-### Example
+Execute:
 
-```sh
-echo "build artifact v1" | ./attestorium.sh
-```
+attestorium artifact.json
 
-Produces an immutable attestation tying:
+stdin example:
 
-* the text
-* the repository state
-* the moment of observation
+cat artifact.json | attestorium
 
 ---
 
-## Contract
+## Determinism Guarantees
 
-Once emitted:
+For identical canonical input, ATTESTORIUM must produce identical attestation output.
 
-* The attestation stands
-* Interpretation is external
-* Responsibility transfers to the observer
+No hidden environmental state may influence the result.
 
-ATTESTORIUM guarantees **record**, not **meaning**.
-
-If you want judgment, use something else.
+ATTESTORIUM assumes an already-bounded and already-verified prior state and does not substitute for origin, custody, time, boundary, verification, judgment, or termination primitives.
 
 ---
 
-## Design Constraints
+## Security Model
 
-These constraints are intentional:
+ATTESTORIUM protects against ambiguity in whether a verification result was actually witnessed and attested.
 
-* No configuration → no ambiguity
-* No execution → no side effects
-* No retries → no narrative drift
-
-Truth is narrow by design.
+Its security value is to preserve a deterministic witness layer over a completed verification result. It does not itself decide final judgment and does not terminate lifecycle state.
 
 ---
 
-## Relationship to Other Artifacts
+## Relationship to Other Primitives
 
-* **IRREVOCULL** — decides
-* **GUILLOTINE** — destroys
-* **ATTESTORIUM** — witnesses
+Canonical primitive order:
 
-Each performs exactly one irreversible role.
+1 originseal  
+2 archicustos  
+3 kairoclasp  
+4 limenward  
+5 validexor  
+6 attestorium  
+7 irrevocull  
+8 guillotine
+
+Repositories:
+
+https://github.com/Verifrax/originseal  
+https://github.com/Verifrax/archicustos  
+https://github.com/Verifrax/kairoclasp  
+https://github.com/Verifrax/limenward  
+https://github.com/Verifrax/validexor  
+https://github.com/Verifrax/attestorium  
+https://github.com/Verifrax/irrevocull  
+https://github.com/Verifrax/guillotine
 
 ---
 
-## Warning
+## Installation
 
-An attestation can be used against you.
+npm install -g @verifrax/attestorium
 
-That is the point.
+command -v attestorium
 
----
-
-## About
-
-ATTESTORIUM is a minimal, irreversible witness for software reality.
-
-If you need flexibility, do not use it.
-If you need truth, nothing else will do.
+Repository:
+- GitHub: https://github.com/Verifrax/attestorium
+- Package: @verifrax/attestorium
+- Binary: attestorium
 
 ---
 
-## Responsibility Boundary
+## License
 
-This software is provided under the MIT License.
-
-The MIT License permits use, copying, modification, and redistribution of the code, but it does not provide assurance, certification, audit defense, operational guarantees, or liability coverage.
-
-Use of this software in environments where failure, compliance, legal exposure, or irreversible decisions matter requires an accountable party.
-
-The original maintainer is available for assurance, adaptation, and responsibility when such accountability is required.
-
-Contact: contact@speedkit.eu
-
-Authoritative signed records are issued separately and are not produced by the software.
+MIT
