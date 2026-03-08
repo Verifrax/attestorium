@@ -1,0 +1,26 @@
+{
+  "name": "@verifrax/attestorium",
+  "version": "0.1.0",
+  "description": "Verifrax primitive — attestation primitive for deterministic irreversible systems.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Verifrax/attestorium.git"
+  },
+  "homepage": "https://github.com/Verifrax/attestorium#readme",
+  "bugs": {
+    "url": "https://github.com/Verifrax/attestorium/issues"
+  },
+  "bin": {
+    "attestorium": "attestorium.sh"
+  },
+  "files": [
+    "attestorium.sh",
+    "README.md",
+    "LICENSE",
+    "VERSION"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
