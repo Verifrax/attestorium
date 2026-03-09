@@ -1,5 +1,5 @@
 #!/bin/sh
-# ATTESTORIUM v0.0.0
+# ATTESTORIUM v0.1.0
 # Deterministic attestation utility
 # Witness only. No execution. No mutation. No remediation.
 
@@ -34,8 +34,7 @@ STATUS="$(git status --porcelain=v1 -z | LC_ALL=C sort -z || true)"
 
 # --- Deterministic Digest ---------------------------------------------------
 
-ATTESTATION_PAYLOAD="$(printf '%s\n%s\n%s\n%s\n%s' \
-  "$TIMESTAMP" \
+ATTESTATION_PAYLOAD="$(printf '%s\n%s\n%s\n%s' \
   "$HEAD_COMMIT" \
   "$HEAD_TREE" \
   "$STATUS" \
