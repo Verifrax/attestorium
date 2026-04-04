@@ -1,23 +1,55 @@
 name: Identity
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
-  workflow_dispatch: {}
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 env:
   LC_ALL: C
   TZ: UTC
 
+permissions:
+  contents: read
+
 jobs:
   identity:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: Identity marker
+      - uses: actions/checkout@v4
+
+      - name: Verify primitive identity boundary
         shell: bash
         run: |
           set -euo pipefail
-          echo "identity: ok"
+
+          test -f README.md
+          test -f LICENSE
+          test -f VERSION
+          test -f package.json
+          test -f "attestorium.sh"
+
+          grep -F "# ATTESTORIUM" README.md
+          grep -F "Package: @verifrax/attestorium" README.md
+          grep -F "Binary: attestorium" README.md
+          grep -F "package version: 0.1.0" README.md
+          grep -F "tag: v0.1.0" README.md
+          grep -F "License" README.md
+
+          python3 - <<PY2
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("package.json").read_text())
+
+          assert data["name"] == "@verifrax/attestorium", data
+          assert data["version"] == "0.1.0", data
+          assert data["license"] == "MIT", data
+          assert data["bin"]["attestorium"] == "attestorium.sh", data
+          assert data["repository"]["url"].endswith("Verifrax/attestorium.git"), data
+          assert data["homepage"] == "https://github.com/Verifrax/attestorium#readme", data
+          assert data["bugs"]["url"] == "https://github.com/Verifrax/attestorium/issues", data
+          assert data["publishConfig"]["access"] == "public", data
+          PY2
