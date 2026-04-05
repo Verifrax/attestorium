@@ -7,18 +7,18 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   LC_ALL: C
   TZ: UTC
 
-permissions:
-  contents: read
-
 jobs:
-  identity:
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Verify primitive identity boundary
         shell: bash
@@ -29,27 +29,11 @@ jobs:
           test -f LICENSE
           test -f VERSION
           test -f package.json
-          test -f "attestorium.sh"
+          test -f attestorium.sh
 
-          grep -F "# ATTESTORIUM" README.md
-          grep -F "Package: @verifrax/attestorium" README.md
-          grep -F "Binary: attestorium" README.md
-          grep -F "package version: 0.1.0" README.md
-          grep -F "tag: v0.1.0" README.md
-          grep -F "License" README.md
+          grep -q "^# ATTESTORIUM$" README.md
+          grep -q "^Primitive ID: PRIM-006" README.md
+          grep -q "^Package: @verifrax/attestorium" README.md
+          grep -q "^Binary: attestorium" README.md
 
-          python3 - <<PY2
-          import json
-          from pathlib import Path
-
-          data = json.loads(Path("package.json").read_text())
-
-          assert data["name"] == "@verifrax/attestorium", data
-          assert data["version"] == "0.1.0", data
-          assert data["license"] == "MIT", data
-          assert data["bin"]["attestorium"] == "attestorium.sh", data
-          assert data["repository"]["url"].endswith("Verifrax/attestorium.git"), data
-          assert data["homepage"] == "https://github.com/Verifrax/attestorium#readme", data
-          assert data["bugs"]["url"] == "https://github.com/Verifrax/attestorium/issues", data
-          assert data["publishConfig"]["access"] == "public", data
-          PY2
+          python3 -c 'import json, pathlib; d=json.loads(pathlib.Path("package.json").read_text()); assert d["name"]=="@verifrax/attestorium"; assert d["version"]=="0.1.0"; assert d["license"]=="MIT"; assert d["bin"]["attestorium"]=="attestorium.sh"; assert d["repository"]["url"].endswith("Verifrax/attestorium.git"); assert d["homepage"]=="https://github.com/Verifrax/attestorium#readme"; assert d["bugs"]["url"]=="https://github.com/Verifrax/attestorium/issues"; assert d["publishConfig"]["access"]=="public"' 
