@@ -1,5 +1,9 @@
 # ATTESTORIUM
 
+Package: @verifrax/attestorium
+Binary: attestorium
+Repository: Verifrax/attestorium
+
 Primitive ID: PRIM-006
 Package: @verifrax/attestorium
 Binary: attestorium
