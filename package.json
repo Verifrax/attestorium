@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Verifrax/attestorium.git"
+    "url": "https://github.com/Verifrax/attestorium.git"
   },
   "homepage": "https://github.com/Verifrax/attestorium#readme",
   "bugs": {
